@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Quiz Time</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+
+<body>
+
+
+    <div class="content">
+
+        <h1>LWLC</h1>
+        <h2>Quiz Time</h2>
+        <div>
+            <h2>Regras:</h2>
+            <h4>O Quiz está avaliado em 20 valores.</h4>
+            <h4>Tens 15 segundos para responder a cada questão. </h4>
+            <h4> Podes avançar questões, ao fim do tempo as perguntas não respondidas, não são cotadas.</h4>
+        </div>
+
+        <div id="time" class="time"></div>
+
+        <div id="quiz" class="d-none"></div>
+
+        <div id="result" class="d-none">
+            <strong>Resultado:</strong>
+            <span id="respostas"></span>
+
+        </div>
+
+        <div>
+            <button type="button" id="btn_start" class="mt-10">Começar</button>
+            <button type="button" id="btn_next" class="mt-10 d-none">Seguinte</button>
+            <button type="button" id="btn_finish" class="mt-10 d-none">Terminar!</button>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    var minutosTotais = 0;
+    var segundosTotais = 0;
+    var segundosGastos = 0;
+    var minutosGastos = 0;
+    var tempoQuiz = 0;
+
+    var minute = 0.20;
+    var timer;
+    var endTime;
+
+
+
+
+    const questions = [
+        '{"id": 1, "question": "Which planet in our solar system is closest to the sun?", "choices": ["Mars", "Mercury", "Jupiter"],"answer": "Mercury"}',
+        '{"id": 2, "question": "Which actor played Richard III in the 1995 British film drama of the same title?", "choices": ["Ian McKellen", "Partrick Stewart", "Elijah Wood"],"answer": "Ian McKellen"}',
+        '{"id": 3, "question": "Which Marvel superhero, also known as Steve Rogers, made his first appearance in March 1941?","choices": ["Hulk", "Iron Man", "Captain America"], "answer": "Captain America" }',
+        '{"id": 4, "question": "Which English football club play at Roots Hall?", "choices": ["Liverpool", "Southend United", "Wolverhampton"], "answer": "Southend United" }'
+    ];
+
+    var totalQuestions = questions.length;
+    var currentQuestion = 1;
+    var correctAnswers = 0;
+    var wrongAnswers = 0;
+    var perguntasRespondidas = 0;
+
+    var btnStart = document.getElementById('btn_start');
+    btnStart.addEventListener('click', startQuiz);
+
+    var btnNext = document.getElementById('btn_next');
+    btnNext.addEventListener('click', nextQuestion);
+
+    for (let i = 0; i < questions.length; i++) {
+        let obj = JSON.parse(questions[i]);
+        console.log(obj.question);
+        var divQuiz = document.getElementById("quiz");
+
+        var divQuestion = document.createElement("div");
+        divQuestion.id = "question_" + obj.id;
+
+        var pQuestion = document.createElement("p");
+        pQuestion.id = obj.id;
+        pQuestion.textContent = obj.question;
+        pQuestion.classList.add('font-weight-bold');
+
+        divQuiz.appendChild(divQuestion);
+        divQuestion.appendChild(pQuestion);
+
+        if (i != 0) {
+            divQuestion.classList.add('d-none');
+        }
+
+        for (let j = 0; j < obj.choices.length; j++) {
+
+            console.log(obj.choices[j]);
+
+            var radioChoice = document.createElement('input');
+            radioChoice.setAttribute('type', 'radio');
+            radioChoice.setAttribute('name', obj.id);
+
+            if (obj.answer == obj.choices[j]) {
+                radioChoice.setAttribute('value', 1);
+            }
+            else {
+                radioChoice.setAttribute('value', 0);
+            }
+            radioChoice.id = j;
+            radioChoice.classList.add('ml-20');
+            radioChoice.classList.add('mr-10');
+
+            radioChoice.addEventListener('click', answer);
+
+            divQuestion.appendChild(radioChoice);
+
+            var labelChoice = document.createElement('label');
+            labelChoice.id = "lbl_" + obj.id + "_" + j;
+            labelChoice.textContent = obj.choices[j];
+            divQuestion.appendChild(labelChoice);
+
+        }
+
+    }
+
+    function startQuiz() {
+        let divQuiz = document.getElementById('quiz');
+        divQuiz.classList.remove('d-none');
+
+        btnStart.classList.add('d-none');
+
+        endTime = new Date(new Date().getTime() + minute * 60000);
+        timer = setInterval(countDown, 1000);
+        tempoQuiz = setInterval(tempoGlobal, 1000);
+    }
+
+
+    function answer() {
+        var answers = document.getElementsByName(this.name);
+        for (let i = 0; i < answers.length; i++) {
+            answers[i].disabled = true;
+        }
+        let label = document.getElementById('lbl_' + this.name + '_' + this.id);
+
+        if (this.value == '1') {
+            label.classList.add("text-success");
+            correctAnswers++;
+            perguntasRespondidas++;
+
+        }
+        else {
+            label.classList.add("text-danger");
+            wrongAnswers++;
+            perguntasRespondidas++;
+
+        }
+
+        if (currentQuestion != totalQuestions) {
+            btnNext.classList.remove('d-none');
+        }
+        else {
+            let btnFinish = document.getElementById('btn_finish');
+            btnFinish.addEventListener('click', finishQuiz);
+            btnFinish.classList.remove('d-none');
+            console.log("FIM!");
+        }
+
+    }
+
+    function nextQuestion() {
+        console.log(this);
+        let divCurrentQuestion = document.getElementById('question_' + currentQuestion);
+        divCurrentQuestion.classList.add('d-none');
+        currentQuestion++;
+        let nextCurrentQuestion = document.getElementById('question_' + currentQuestion);
+        nextCurrentQuestion.classList.remove('d-none');
+
+        clearTimeout(timer);
+        endTime = new Date(new Date().getTime() + minute * 60000);
+
+        timer = setInterval(countDown, 1000);
+        this.classList.add('d-none');
+
+
+    }
+
+    function finishQuiz() {
+
+        clearTimeout(timer);
+        clearTimeout(tempoQuiz);
+
+        //AO CLICAR NO TERMINAR REMOVER A DIV COM A ULTIMA PERGUNTA, USANDO CLASS D-NONE
+        document.getElementById('question_' + currentQuestion).classList.add('d-none');
+
+        let removeBtn = document.getElementById('btn_finish');
+        removeBtn.classList.add('d-none');
+
+        //AO EXECUTAR O BOTAO TERMINAR, REMOVEMOS A CLASS DO TIMER PARA D-NONE 
+        let removeTimer = document.getElementById('time');
+        removeTimer.classList.add('d-none');
+
+        let resultado = document.getElementById('result');
+        resultado.classList.remove('d-none');
+        let span = document.getElementById('respostas');
+
+        span.innerHTML = "<br>" + "Respostas corretas: " + correctAnswers + "/" + totalQuestions + "<br>" + "Respostas erradas: " + wrongAnswers + "/" + totalQuestions + "<br>" + "Perguntas não respondidas: " + (totalQuestions - perguntasRespondidas) + "<br>" + "Tempo gasto no quiz:" + minutosGastos + ":" + segundosGastos;
+        //PERGUNTAS NAO RESPONDIDAS= TODAS AS PERGUNTAS - PERGUNTAS RESPONDIDAS(VARIAVEL NOVA CRIADA QUE É INCREMENTADA NAS RESPOSTAS CERTAS E ERRADAS, CONTAM COMO RESPONDIDAS)
+    }
+
+
+
+    function tempoGlobal() {
+        segundosTotais++;
+        segundosGastos = segundosTotais % 60;
+        if (segundosGastos < 10) {
+            segundosGastos = "0" + segundosGastos;
+        }
+        minutosGastos = parseInt(segundosTotais / 60);
+
+    }
+
+
+    function countDown() {
+
+        let now = new Date().getTime();
+
+        let distance = endTime - now;
+
+        let minute = Math.floor((distance % (1000 * 60 * 60) / (1000 * 60)));
+        let seconds = Math.floor((distance % (1000 * 60 * 60) / (1000)));
+
+        document.getElementById('time').innerHTML = minute + ":" + seconds;
+
+        if (distance < 0) {
+
+            clearTimeout(timer);
+
+            if (currentQuestion == totalQuestions) {
+                document.getElementById('question_' + currentQuestion).classList.add('d-none');
+                finishQuiz();
+            } else {
+                btnNext.classList.add('d-none');
+                nextQuestion();
+
+            }
+
+        }
+    }
+</script>
+
+
+</html>

@@ -1,0 +1,43 @@
+.ml-20 {
+    margin-left: 20px;
+}
+.mr-10{
+    margin-right: 10x;
+}
+.font-weight-bold{
+    font-weight: bold;
+}
+.text-success{
+    color: green;
+}
+.text-danger{
+    color: red;
+}
+.mt-10{
+    margin-top: 10px;
+}
+.d-none{
+    display: none;
+}
+
+.content {
+    width: 100%;
+}
+
+.time{
+    font-weight: 900;
+    text-align: center;
+}
+
+body {
+    padding-top: 250px;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 1000;
+    text-align: center;
+    background-image: url('https://image.freepik.com/vetores-gratis/quadro-negro-com-dois-pedacos-de-giz_97886-5.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;  
+    background-size: cover;
+  }
