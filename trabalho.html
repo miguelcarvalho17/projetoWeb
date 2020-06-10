@@ -62,10 +62,10 @@
 
 
     const questions = [
-        '{"id": 1, "question": "Which planet in our solar system is closest to the sun?", "choices": ["Mars", "Mercury", "Jupiter"],"answer": "Mercury"}',
-        '{"id": 2, "question": "Which actor played Richard III in the 1995 British film drama of the same title?", "choices": ["Ian McKellen", "Partrick Stewart", "Elijah Wood"],"answer": "Ian McKellen"}',
-        '{"id": 3, "question": "Which Marvel superhero, also known as Steve Rogers, made his first appearance in March 1941?","choices": ["Hulk", "Iron Man", "Captain America"], "answer": "Captain America" }',
-        '{"id": 4, "question": "Which English football club play at Roots Hall?", "choices": ["Liverpool", "Southend United", "Wolverhampton"], "answer": "Southend United" }'
+        '{"id": 1, "question": "Which of the following is correct?", "choices": ["jQuery is a JSON Library.", "JQuery is a Javascript Library"],"answer": "JQuery is a Javascript Library"}',
+        '{"id": 2, "question": "Which sign does jQuery use as a shortcut for jQuery?", "choices": ["The % sign", "The ? Sign", "The $ sign"],"answer": "The $ sign"}',
+        '{"id": 3, "question": "Is jQuery a library for client scripting or server scripting?","choices": ["Server scripting", "Client scripting"], "answer": "Client scripting" }',
+        '{"id": 4, "question": "Which jQuery function is used to prevent code from running, before the document is finished loading?", "choices": ["$(document).ready()", "$(body).onload()", "$(document).load()"], "answer": "$(document).ready()" }'
     ];
 
     var totalQuestions = questions.length;
@@ -187,6 +187,7 @@
 
             $("#btn_finish").removeClass('d-none');
             //btnFinish.classList.remove('d-none');
+            $("#btn_next").addClass('d-none');
             console.log("FIM!");
         }
 
@@ -207,7 +208,7 @@
         endTime = new Date(new Date().getTime() + minute * 60000);
 
         timer = setInterval(countDown, 1000);
-        this.classList.add('d-none');
+        //this.classList.add('d-none');
 
 
     }
