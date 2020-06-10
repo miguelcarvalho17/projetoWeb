@@ -44,6 +44,10 @@
 
 <script>
 
+    $(document).ready(function(){
+
+    
+
     var minutosTotais = 0;
     var segundosTotais = 0;
     var segundosGastos = 0;
@@ -70,11 +74,18 @@
     var wrongAnswers = 0;
     var perguntasRespondidas = 0;
 
-    var btnStart = document.getElementById('btn_start');
-    btnStart.addEventListener('click', startQuiz);
+    $("#btn_start").click(function() {
+        startQuiz();
+        
+    });
+    //var btnStart = document.getElementById('btn_start');
+    //btnStart.addEventListener('click', startQuiz);
 
-    var btnNext = document.getElementById('btn_next');
-    btnNext.addEventListener('click', nextQuestion);
+    $("#btn_next").click(function(){
+        nextQuestion();
+    });
+    //var btnNext = document.getElementById('btn_next');
+    //btnNext.addEventListener('click', nextQuestion);
 
     for (let i = 0; i < questions.length; i++) {
         let obj = JSON.parse(questions[i]);
@@ -91,6 +102,7 @@
 
         divQuiz.appendChild(divQuestion);
         divQuestion.appendChild(pQuestion);
+        
 
         if (i != 0) {
             divQuestion.classList.add('d-none');
@@ -128,10 +140,13 @@
     }
 
     function startQuiz() {
-        let divQuiz = document.getElementById('quiz');
-        divQuiz.classList.remove('d-none');
 
-        btnStart.classList.add('d-none');
+        $("#quiz").removeClass('d-none');
+        //let divQuiz = document.getElementById('quiz');
+        //divQuiz.classList.remove('d-none');
+
+        $("#btn_start").addClass('d-none');
+        //btnStart.classList.add('d-none');
 
         endTime = new Date(new Date().getTime() + minute * 60000);
         timer = setInterval(countDown, 1000);
@@ -160,12 +175,18 @@
         }
 
         if (currentQuestion != totalQuestions) {
-            btnNext.classList.remove('d-none');
+            $("#btn_next").removeClass('d-none');
+            //btnNext.classList.remove('d-none');
         }
         else {
-            let btnFinish = document.getElementById('btn_finish');
-            btnFinish.addEventListener('click', finishQuiz);
-            btnFinish.classList.remove('d-none');
+            $("#btn_finish").click(function(){
+                finishQuiz();
+            });
+            //let btnFinish = document.getElementById('btn_finish');
+            //btnFinish.addEventListener('click', finishQuiz);
+
+            $("#btn_finish").removeClass('d-none');
+            //btnFinish.classList.remove('d-none');
             console.log("FIM!");
         }
 
@@ -173,11 +194,14 @@
 
     function nextQuestion() {
         console.log(this);
-        let divCurrentQuestion = document.getElementById('question_' + currentQuestion);
-        divCurrentQuestion.classList.add('d-none');
+        $("#question_" + currentQuestion).addClass('d-none');
+        //let divCurrentQuestion = document.getElementById('question_' + currentQuestion);
+        //divCurrentQuestion.classList.add('d-none');
         currentQuestion++;
-        let nextCurrentQuestion = document.getElementById('question_' + currentQuestion);
-        nextCurrentQuestion.classList.remove('d-none');
+
+        $("#question_" + currentQuestion).removeClass('d-none');
+        //let nextCurrentQuestion = document.getElementById('question_' + currentQuestion);
+        //nextCurrentQuestion.classList.remove('d-none');
 
         clearTimeout(timer);
         endTime = new Date(new Date().getTime() + minute * 60000);
@@ -194,20 +218,25 @@
         clearTimeout(tempoQuiz);
 
         //AO CLICAR NO TERMINAR REMOVER A DIV COM A ULTIMA PERGUNTA, USANDO CLASS D-NONE
-        document.getElementById('question_' + currentQuestion).classList.add('d-none');
+        $("#question_" + currentQuestion).addClass('d-none');
+        //document.getElementById('question_' + currentQuestion).classList.add('d-none');
 
-        let removeBtn = document.getElementById('btn_finish');
-        removeBtn.classList.add('d-none');
+        $("#btn_finish").addClass('d-none');
+        //let removeBtn = document.getElementById('btn_finish');
+        //removeBtn.classList.add('d-none');
 
         //AO EXECUTAR O BOTAO TERMINAR, REMOVEMOS A CLASS DO TIMER PARA D-NONE 
-        let removeTimer = document.getElementById('time');
-        removeTimer.classList.add('d-none');
+        $("#time").addClass('d-none');
+        //let removeTimer = document.getElementById('time');
+        //removeTimer.classList.add('d-none');
 
-        let resultado = document.getElementById('result');
-        resultado.classList.remove('d-none');
-        let span = document.getElementById('respostas');
-
-        span.innerHTML = "<br>" + "Respostas corretas: " + correctAnswers + "/" + totalQuestions + "<br>" + "Respostas erradas: " + wrongAnswers + "/" + totalQuestions + "<br>" + "Perguntas não respondidas: " + (totalQuestions - perguntasRespondidas) + "<br>" + "Tempo gasto no quiz:" + minutosGastos + ":" + segundosGastos;
+        $("#result").removeClass('d-none');
+        //let resultado = document.getElementById('result');
+        //resultado.classList.remove('d-none');
+        
+        $("#respostas").html("<br>" + "Respostas corretas: " + correctAnswers + "/" + totalQuestions + "<br>" + "Respostas erradas: " + wrongAnswers + "/" + totalQuestions + "<br>" + "Perguntas não respondidas: " + (totalQuestions - perguntasRespondidas) + "<br>" + "Tempo gasto no quiz:" + minutosGastos + ":" + segundosGastos);
+        //let span = document.getElementById('respostas');
+        //span.innerHTML = "<br>" + "Respostas corretas: " + correctAnswers + "/" + totalQuestions + "<br>" + "Respostas erradas: " + wrongAnswers + "/" + totalQuestions + "<br>" + "Perguntas não respondidas: " + (totalQuestions - perguntasRespondidas) + "<br>" + "Tempo gasto no quiz:" + minutosGastos + ":" + segundosGastos;
         //PERGUNTAS NAO RESPONDIDAS= TODAS AS PERGUNTAS - PERGUNTAS RESPONDIDAS(VARIAVEL NOVA CRIADA QUE É INCREMENTADA NAS RESPOSTAS CERTAS E ERRADAS, CONTAM COMO RESPONDIDAS)
     }
 
@@ -233,23 +262,28 @@
         let minute = Math.floor((distance % (1000 * 60 * 60) / (1000 * 60)));
         let seconds = Math.floor((distance % (1000 * 60 * 60) / (1000)));
 
-        document.getElementById('time').innerHTML = minute + ":" + seconds;
+        $("#time").text( minute + ":" + seconds);
+        //document.getElementById('time').innerHTML = minute + ":" + seconds;
 
         if (distance < 0) {
 
             clearTimeout(timer);
 
             if (currentQuestion == totalQuestions) {
-                document.getElementById('question_' + currentQuestion).classList.add('d-none');
+                $("#question"+ currentQuestion).addClass('d-none');
+                //document.getElementById('question_' + currentQuestion).classList.add('d-none');
                 finishQuiz();
             } else {
-                btnNext.classList.add('d-none');
+                $("#btn_next").addClass('d-none');
+                //btnNext.classList.add('d-none');
                 nextQuestion();
 
             }
 
         }
     }
+
+});
 </script>
 
 
