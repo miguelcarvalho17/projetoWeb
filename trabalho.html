@@ -190,6 +190,7 @@
                 //btnNext.classList.remove('d-none');
             }
             else {
+                $("#btn_prev").removeClass('d-none');
                 $("#btn_finish").click(function () {
                     finishQuiz();
                 });
@@ -198,8 +199,8 @@
 
                 $("#btn_finish").removeClass('d-none');
                 //btnFinish.classList.remove('d-none');
-                $("#btn_next").addClass('d-none');
-                $("#btn_prev").addClass('d-none');
+                
+                $("#btn_prev").removeClass('d-none');
                 console.log("FIM!");
             }
 
@@ -240,6 +241,9 @@
             $("#question_" + currentQuestion).addClass('d-none');
             //document.getElementById('question_' + currentQuestion).classList.add('d-none');
 
+
+            $("#btn_next").addClass('d-none');
+            $("#btn_prev").addClass('d-none');
             $("#btn_finish").addClass('d-none');
             //let removeBtn = document.getElementById('btn_finish');
             //removeBtn.classList.add('d-none');
@@ -277,9 +281,13 @@
 
                 clearTimeout(timer);
                 finishQuiz();
+                $("#btn_next").addClass('d-none');
+                $("#btn_prev").addClass('d-none');
 
                 if (currentQuestion == totalQuestions) {
                     $("#question_"+ currentQuestion).addClass('d-none');
+                    
+
                     //document.getElementById('question_' + currentQuestion).classList.add('d-none');
                     finishQuiz();
                 }
