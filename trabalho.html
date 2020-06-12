@@ -18,8 +18,8 @@
         <div>
             <h2>Regras:</h2>
             <h4>O Quiz está avaliado em 20 valores.</h4>
-            <h4>Tens 15 segundos para responder a cada questão. </h4>
-            <h4> Podes avançar questões, ao fim do tempo as perguntas não respondidas, não são cotadas.</h4>
+            <h4>Tens 1 minuto para responder ao questionário. </h4>
+            <h4>Podes avançar questões, ao fim do tempo as perguntas não respondidas, não são cotadas.</h4>
         </div>
 
         <div id="time" class="time"></div>
@@ -47,30 +47,25 @@
 
     $(document).ready(function () {
 
-
-
         var minutosTotais = 0;
         var segundosTotais = 0;
         var segundosGastos = 0;
         var minutosGastos = 0;
         var tempoQuiz = 0;
 
-        var minute = 0.9;
+        var minute = 1;
         var timer;
         var endTime;
 
-
-
-
         const questions = [
-            '{"id": 1, "question": "Which of the following is correct?", "choices": ["jQuery is a JSON Library", "JQuery is a Javascript Library"],"answer": "JQuery is a Javascript Library"}',
-            '{"id": 2, "question": "Which sign does jQuery use as a shortcut for jQuery?", "choices": ["The % sign", "The ? Sign", "The $ sign"],"answer": "The $ sign"}',
-            '{"id": 3, "question": "Is jQuery a library for client scripting or server scripting?","choices": ["Server scripting", "Client scripting"], "answer": "Client scripting" }',
-            '{"id": 4, "question": "Which jQuery function is used to prevent code from running, before the document is finished loading?", "choices": ["$(document).ready()", "$(body).onload()", "$(document).load()"], "answer": "$(document).ready()" }',
-            '{"id": 5, "question": "The jQuery html() method works for both HTML and XML documents?", "choices": ["True", "False"],"answer": "False"}',
-            '{"id": 6, "question": "Javascript is the same as Java?", "choices": ["True", "False"],"answer": "False"}',
-            '{"id": 7, "question": "The external Javascript file must contain the <script> tag?", "choices": ["True", "False"],"answer": "False"}',
-            '{"id": 8, "question": "Inline elements are normally displayed without starting a new line", "choices": ["True", "False"],"answer": "True"}'
+            '{"id": 1, "question": "Which of the following is correct? (1 valor)", "choices": ["jQuery is a JSON Library", "JQuery is a Javascript Library"],"answer": "JQuery is a Javascript Library", "valor": "1"}',
+            '{"id": 2, "question": "Which sign does jQuery use as a shortcut for jQuery? (1 valor)", "choices": ["The % sign", "The ? Sign", "The $ sign"],"answer": "The $ sign", "valor": "1"}',
+            '{"id": 3, "question": "Is jQuery a library for client scripting or server scripting? (1 valor)","choices": ["Server scripting", "Client scripting"], "answer": "Client scripting","valor": "1" }',
+            '{"id": 4, "question": "Which jQuery function is used to prevent code from running, before the document is finished loading? (1 valor)", "choices": ["$(document).ready()", "$(body).onload()", "$(document).load()"], "answer": "$(document).ready()","valor": "1" }',
+            '{"id": 5, "question": "The jQuery html() method works for both HTML and XML documents? (1 valor)", "choices": ["True", "False"],"answer": "False","valor": "1"}',
+            '{"id": 6, "question": "Javascript is the same as Java? (1 valor)", "choices": ["True", "False"],"answer": "False","valor": "1"}',
+            '{"id": 7, "question": "The external Javascript file must contain the <script> tag? (1 valor)", "choices": ["True", "False"],"answer": "False","valor": "1"}',
+            '{"id": 8, "question": "Inline elements are normally displayed without starting a new line. (1 valor)", "choices": ["True", "False"],"answer": "True","valor": "1"}'
         ];
 
         var totalQuestions = questions.length;
@@ -78,6 +73,7 @@
         var correctAnswers = 0;
         var wrongAnswers = 0;
         var perguntasRespondidas = 0;
+        var score = 0;
 
         $("#btn_start").click(function () {
             startQuiz();
@@ -99,7 +95,8 @@
 
         for (let i = 0; i < questions.length; i++) {
             let obj = JSON.parse(questions[i]);
-            console.log(obj.question);
+            
+            
             var divQuiz = document.getElementById("quiz");
 
             var divQuestion = document.createElement("div");
@@ -119,15 +116,14 @@
             }
 
             for (let j = 0; j < obj.choices.length; j++) {
-
-                console.log(obj.choices[j]);
-
+                
                 var radioChoice = document.createElement('input');
                 radioChoice.setAttribute('type', 'radio');
                 radioChoice.setAttribute('name', obj.id);
 
                 if (obj.answer == obj.choices[j]) {
                     radioChoice.setAttribute('value', 1);
+                    
                 }
                 else {
                     radioChoice.setAttribute('value', 0);
@@ -137,17 +133,16 @@
                 radioChoice.classList.add('mr-10');
 
                 radioChoice.addEventListener('click', answer);
-
                 divQuestion.appendChild(radioChoice);
 
                 var labelChoice = document.createElement('label');
                 labelChoice.id = "lbl_" + obj.id + "_" + j;
                 labelChoice.textContent = obj.choices[j];
                 divQuestion.appendChild(labelChoice);
-
             }
-
+            
         }
+        
 
         function startQuiz() {
 
@@ -157,6 +152,8 @@
 
             $("#btn_start").addClass('d-none');
             //btnStart.classList.add('d-none');
+
+            $("#btn_next").removeClass('d-none');
 
             endTime = new Date(new Date().getTime() + minute * 60000);
             timer = setInterval(countDown, 1000);
@@ -170,21 +167,22 @@
                 answers[i].disabled = true;
             }
             let label = document.getElementById('lbl_' + this.name + '_' + this.id);
-
+            
             if (this.value == '1') {
                 label.classList.add("text-success");
                 correctAnswers++;
                 perguntasRespondidas++;
-
+                score++;
             }
             else {
                 label.classList.add("text-danger");
-                wrongAnswers++;
+                wrongAnswers++; 
                 perguntasRespondidas++;
 
             }
 
             if (currentQuestion != totalQuestions) {
+                
                 $("#btn_next").removeClass('d-none');
                 $("#btn_prev").removeClass('d-none');
                 //btnNext.classList.remove('d-none');
@@ -199,6 +197,8 @@
 
                 $("#btn_finish").removeClass('d-none');
                 //btnFinish.classList.remove('d-none');
+
+                $("#btn_next").addClass('d-none');
                 
                 $("#btn_prev").removeClass('d-none');
                 console.log("FIM!");
@@ -257,7 +257,7 @@
             //let resultado = document.getElementById('result');
             //resultado.classList.remove('d-none');
 
-            $("#respostas").html("<br>" + "Respostas corretas: " + correctAnswers + "/" + totalQuestions + "<br>" + "Respostas erradas: " + wrongAnswers + "/" + totalQuestions + "<br>" + "Perguntas não respondidas: " + (totalQuestions - perguntasRespondidas) + "<br>" + "Tempo gasto no quiz:" + minutosGastos + ":" + segundosGastos);
+            $("#respostas").html("<br>" + "Classificação:" + score + "<br>"+ "Respostas corretas: " + correctAnswers + "/" + totalQuestions + "<br>" + "Respostas erradas: " + wrongAnswers + "/" + totalQuestions + "<br>" + "Perguntas não respondidas: " + (totalQuestions - perguntasRespondidas) + "<br>" + "Tempo gasto no quiz:" + minutosGastos + ":" + segundosGastos);
             //let span = document.getElementById('respostas');
             //span.innerHTML = "<br>" + "Respostas corretas: " + correctAnswers + "/" + totalQuestions + "<br>" + "Respostas erradas: " + wrongAnswers + "/" + totalQuestions + "<br>" + "Perguntas não respondidas: " + (totalQuestions - perguntasRespondidas) + "<br>" + "Tempo gasto no quiz:" + minutosGastos + ":" + segundosGastos;
             //PERGUNTAS NAO RESPONDIDAS= TODAS AS PERGUNTAS - PERGUNTAS RESPONDIDAS(VARIAVEL NOVA CRIADA QUE É INCREMENTADA NAS RESPOSTAS CERTAS E ERRADAS, CONTAM COMO RESPONDIDAS)

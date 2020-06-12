@@ -41,3 +41,10 @@ body {
     background-attachment: fixed;  
     background-size: cover;
   }
+
+#btn_start{
+    font-size: 24px;
+    background-color: white;
+    border-radius: 8px;
+    border: 2px solid #4CAF50;
+}
