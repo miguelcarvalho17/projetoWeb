@@ -19,7 +19,7 @@
             <h2>Regras:</h2>
             <h4>O Quiz está avaliado em 20 valores.</h4>
             <h4>Tens 1 minuto para responder ao questionário. </h4>
-            <h4>Podes avançar questões, ao fim do tempo as perguntas não respondidas, não são cotadas.</h4>
+            <h4>Podes avançar questões, ao fim do tempo as perguntas erradas e não respondidas, não são cotadas.</h4>
         </div>
 
         <div id="time" class="time"></div>
@@ -58,14 +58,14 @@
         var endTime;
 
         const questions = [
-            '{"id": 1, "question": "Which of the following is correct? (1 valor)", "choices": ["jQuery is a JSON Library", "JQuery is a Javascript Library"],"answer": "JQuery is a Javascript Library", "valor": "1"}',
-            '{"id": 2, "question": "Which sign does jQuery use as a shortcut for jQuery? (1 valor)", "choices": ["The % sign", "The ? Sign", "The $ sign"],"answer": "The $ sign", "valor": "1"}',
-            '{"id": 3, "question": "Is jQuery a library for client scripting or server scripting? (1 valor)","choices": ["Server scripting", "Client scripting"], "answer": "Client scripting","valor": "1" }',
-            '{"id": 4, "question": "Which jQuery function is used to prevent code from running, before the document is finished loading? (1 valor)", "choices": ["$(document).ready()", "$(body).onload()", "$(document).load()"], "answer": "$(document).ready()","valor": "1" }',
-            '{"id": 5, "question": "The jQuery html() method works for both HTML and XML documents? (1 valor)", "choices": ["True", "False"],"answer": "False","valor": "1"}',
-            '{"id": 6, "question": "Javascript is the same as Java? (1 valor)", "choices": ["True", "False"],"answer": "False","valor": "1"}',
-            '{"id": 7, "question": "The external Javascript file must contain the <script> tag? (1 valor)", "choices": ["True", "False"],"answer": "False","valor": "1"}',
-            '{"id": 8, "question": "Inline elements are normally displayed without starting a new line. (1 valor)", "choices": ["True", "False"],"answer": "True","valor": "1"}'
+            '{"id": 1, "question": "Which of the following is correct? (1 valor)","Tipo de pergunta": "Escolha unica", "choices": ["jQuery is a JSON Library", "JQuery is a Javascript Library"],"answer": "JQuery is a Javascript Library", "valor": "2"}',
+            '{"id": 2, "question": "Which sign does jQuery use as a shortcut for jQuery? (1 valor)","Tipo de pergunta": "Escolha unica", "choices": ["The % sign", "The ? Sign", "The $ sign"],"answer": "The $ sign", "valor": "2"}',
+            '{"id": 3, "question": "Is jQuery a library for client scripting or server scripting? (1 valor)","Tipo de pergunta": "Escolha unica","choices": ["Server scripting", "Client scripting"], "answer": "Client scripting","valor": "2" }',
+            '{"id": 4, "question": "Which jQuery function is used to prevent code from running, before the document is finished loading? (1 valor)","Tipo de pergunta": "Escolha unica", "choices": ["$(document).ready()", "$(body).onload()", "$(document).load()"], "answer": "$(document).ready()","valor": "2" }',
+            '{"id": 5, "question": "The jQuery html() method works for both HTML and XML documents? (1 valor)","Tipo de pergunta": "Verdadeiro ou Falso", "choices": ["True", "False"],"answer": "False","valor": "2"}',
+            '{"id": 6, "question": "Javascript is the same as Java? (1 valor)", "choices": ["True", "False"],"Tipo de pergunta": "Verdadeiro ou Falso","answer": "False","valor": "2"}',
+            '{"id": 7, "question": "The external Javascript file must contain the <script> tag? (1 valor)","Tipo de pergunta": "Verdadeiro ou Falso", "choices": ["True", "False"],"answer": "False","valor": "2"}',
+            '{"id": 8, "question": "Inline elements are normally displayed without starting a new line. (1 valor)","Tipo de pergunta": "Verdadeiro ou Falso", "choices": ["True", "False"],"answer": "True","valor": "2"}'
         ];
 
         var totalQuestions = questions.length;
@@ -123,7 +123,7 @@
 
                 if (obj.answer == obj.choices[j]) {
                     radioChoice.setAttribute('value', 1);
-                    
+                    score = parseInt(obj.valor);
                 }
                 else {
                     radioChoice.setAttribute('value', 0);
@@ -172,7 +172,7 @@
                 label.classList.add("text-success");
                 correctAnswers++;
                 perguntasRespondidas++;
-                score++;
+                //score++;
             }
             else {
                 label.classList.add("text-danger");
@@ -223,6 +223,16 @@
             $("#question_" + currentQuestion).removeClass('d-none');
             //let nextCurrentQuestion = document.getElementById('question_' + currentQuestion);
             //nextCurrentQuestion.classList.remove('d-none');
+
+            if(currentQuestion == totalQuestions){
+                $("#btn_next").addClass('d-none');
+                $("#btn_prev").removeClass('d-none');
+                $("#btn_finish").removeClass('d-none');
+                $("#btn_finish").click(function(){
+                    finishQuiz();
+                })
+                
+            }
 
             //clearTimeout(timer);
             //endTime = new Date(new Date().getTime() + minute * 60000);
