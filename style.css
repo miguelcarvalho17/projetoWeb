@@ -44,7 +44,8 @@ body {
 
 #btn_start{
     font-size: 24px;
-    background-color: white;
+    background-color: rgb(4, 26, 1);
+    color: white;
     border-radius: 8px;
-    border: 2px solid #4CAF50;
+    
 }

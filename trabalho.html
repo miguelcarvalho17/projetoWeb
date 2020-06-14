@@ -17,7 +17,7 @@
         <h2>Quiz Time</h2>
         <div>
             <h2>Regras:</h2>
-            <h4>O Quiz está avaliado em 20 valores.</h4>
+            <h4>O Quiz está avaliado em 10 valores.</h4>
             <h4>Tens 1 minuto para responder ao questionário. </h4>
             <h4>Podes avançar questões, ao fim do tempo as perguntas erradas e não respondidas, não são cotadas.</h4>
         </div>
@@ -58,14 +58,16 @@
         var endTime;
 
         const questions = [
-            '{"id": 1, "question": "Which of the following is correct? (1 valor)","Tipo de pergunta": "Escolha unica", "choices": ["jQuery is a JSON Library", "JQuery is a Javascript Library"],"answer": "JQuery is a Javascript Library", "valor": "2"}',
-            '{"id": 2, "question": "Which sign does jQuery use as a shortcut for jQuery? (1 valor)","Tipo de pergunta": "Escolha unica", "choices": ["The % sign", "The ? Sign", "The $ sign"],"answer": "The $ sign", "valor": "2"}',
-            '{"id": 3, "question": "Is jQuery a library for client scripting or server scripting? (1 valor)","Tipo de pergunta": "Escolha unica","choices": ["Server scripting", "Client scripting"], "answer": "Client scripting","valor": "2" }',
-            '{"id": 4, "question": "Which jQuery function is used to prevent code from running, before the document is finished loading? (1 valor)","Tipo de pergunta": "Escolha unica", "choices": ["$(document).ready()", "$(body).onload()", "$(document).load()"], "answer": "$(document).ready()","valor": "2" }',
-            '{"id": 5, "question": "The jQuery html() method works for both HTML and XML documents? (1 valor)","Tipo de pergunta": "Verdadeiro ou Falso", "choices": ["True", "False"],"answer": "False","valor": "2"}',
-            '{"id": 6, "question": "Javascript is the same as Java? (1 valor)", "choices": ["True", "False"],"Tipo de pergunta": "Verdadeiro ou Falso","answer": "False","valor": "2"}',
-            '{"id": 7, "question": "The external Javascript file must contain the <script> tag? (1 valor)","Tipo de pergunta": "Verdadeiro ou Falso", "choices": ["True", "False"],"answer": "False","valor": "2"}',
-            '{"id": 8, "question": "Inline elements are normally displayed without starting a new line. (1 valor)","Tipo de pergunta": "Verdadeiro ou Falso", "choices": ["True", "False"],"answer": "True","valor": "2"}'
+            '{"id": 1, "question": "Which of the following is correct? (1 valor)","tipo_pergunta": "escolha_unica", "choices": ["jQuery is a JSON Library", "JQuery is a Javascript Library"],"answer": "JQuery is a Javascript Library", "valor": 2}',
+            '{"id": 2, "question": "Which sign does jQuery use as a shortcut for jQuery? (1 valor)","tipo_pergunta": "escolha_unica", "choices": ["The % sign", "The ? Sign", "The $ sign"],"answer": "The $ sign", "valor": 2}',
+            '{"id": 3, "question": "Is jQuery a library for client scripting or server scripting? (1 valor)","tipo_pergunta": "escolha_unica","choices": ["Server scripting", "Client scripting"], "answer": "Client scripting","valor": 2 }',
+            '{"id": 4, "question": "Which jQuery function is used to prevent code from running, before the document is finished loading? (1 valor)","tipo_pergunta": "escolha_unica", "choices": ["$(document).ready()", "$(body).onload()", "$(document).load()"], "answer": "$(document).ready()","valor": 2 }',
+            '{"id": 5, "question": "The jQuery html() method works for both HTML and XML documents? (1 valor)","tipo_pergunta": "verdadeiro_falso", "choices": ["True", "False"],"answer": "False","valor": 1}',
+            '{"id": 6, "question": "Javascript is the same as Java? (1 valor)","tipo_pergunta": "verdadeiro_falso", "choices": ["True", "False"],"answer": "False","valor": 1}',
+            '{"id": 7, "question": "The external Javascript file must contain the <script> tag? (1 valor)","tipo_pergunta": "verdadeiro_falso", "choices": ["True", "False"],"answer": "False","valor": 1}',
+            '{"id": 8, "question": "Inline elements are normally displayed without starting a new line. (1 valor)","tipo_pergunta": "verdadeiro_falso", "choices": ["True", "False"],"answer": "True","valor": 1}',
+            '{"id": 9, "question": "Write the correct function to hide elements. (1 valor)", "tipo_pergunta": "caixa_texto", "choices": [],"answer": ".hide()", "valor": 1}',
+            '{"id": 10, "question": "How can you comment a line of code in jQuery? (1 valor)","tipo_pergunta": "caixa_texto", "choices": [],"answer": "//", "valor": 1}'
         ];
 
         var totalQuestions = questions.length;
@@ -88,15 +90,16 @@
         //var btnNext = document.getElementById('btn_next');
         //btnNext.addEventListener('click', nextQuestion);
 
-        $("#btn_prev").click(function(){
+        $("#btn_prev").click(function () {
             previousQuestion();
         })
 
 
         for (let i = 0; i < questions.length; i++) {
+            console.log(questions.length);
             let obj = JSON.parse(questions[i]);
-            
-            
+
+
             var divQuiz = document.getElementById("quiz");
 
             var divQuestion = document.createElement("div");
@@ -115,34 +118,91 @@
                 divQuestion.classList.add('d-none');
             }
 
-            for (let j = 0; j < obj.choices.length; j++) {
+
+
+            if (obj.tipo_pergunta == "escolha_unica" || obj.tipo_pergunta == "verdadeiro_falso") {
+
                 
-                var radioChoice = document.createElement('input');
-                radioChoice.setAttribute('type', 'radio');
-                radioChoice.setAttribute('name', obj.id);
+                for (let j = 0; j < obj.choices.length; j++) {
+                    var radioChoice = document.createElement('input');
+                    $(radioChoice).attr('type', 'radio');
+                    //radioChoice.setAttribute('type', 'radio');
+                    $(radioChoice).attr('name', obj.id);
+                    //radioChoice.setAttribute('name', obj.id);
 
-                if (obj.answer == obj.choices[j]) {
-                    radioChoice.setAttribute('value', 1);
-                    score = parseInt(obj.valor);
+                    if (obj.answer == obj.choices[j]) {
+                        //$(radioChoice).attr('value', 1);
+                        radioChoice.setAttribute('value', 1);
+                    }
+                    else {
+                        $(radioChoice).attr('value', 0);
+                        //radioChoice.setAttribute('value', 0);
+
+                    }
+
+
+                    radioChoice.id = j;
+
+                    $(radioChoice).addClass('ml-20');
+                    $(radioChoice).addClass('mr-10');
+                    //radioChoice.classList.add('ml-20');
+                    //radioChoice.classList.add('mr-10');
+
+                    
+                    //radioChoice.addEventListener('click', answer);
+                    $(divQuestion).append(radioChoice);
+                    //divQuestion.appendChild(radioChoice);
+
+                    var labelChoice = document.createElement('label');
+                    labelChoice.id = "lbl_" + obj.id + "_" + j;
+                    
+                    $(radioChoice).click(function () {
+                        answer(this, "lbl_" + obj.id + "_" + j);
+                    });
+                    
+                    labelChoice.textContent = obj.choices[j];
+                    $(divQuestion).append(labelChoice);
+                    //divQuestion.appendChild(labelChoice);
                 }
-                else {
-                    radioChoice.setAttribute('value', 0);
-                }
-                radioChoice.id = j;
-                radioChoice.classList.add('ml-20');
-                radioChoice.classList.add('mr-10');
-
-                radioChoice.addEventListener('click', answer);
-                divQuestion.appendChild(radioChoice);
-
-                var labelChoice = document.createElement('label');
-                labelChoice.id = "lbl_" + obj.id + "_" + j;
-                labelChoice.textContent = obj.choices[j];
-                divQuestion.appendChild(labelChoice);
             }
-            
+
+            //QUANDO O TIPO DE PERGUNTA NAO É DE ESCOLHA UNICA OU V/F, ENTRA NO TIPO PERGUNTA CAIXA TEXTO
+
+            if (obj.tipo_pergunta == 'caixa_texto') {
+
+                var textChoice = document.createElement('input');
+                $(textChoice).attr('type', 'text');
+                //textChoice.setAttribute('type', 'text');
+                $(textChoice).attr('name', obj.id);
+                //textChoice.setAttribute('name', obj.id);
+
+                textChoice.id = "text_" + i;
+                $(textChoice).addClass('ml-20');
+                //textChoice.classList.add('ml-20');
+                $(textChoice).addClass('mr-10');
+               // textChoice.classList.add('mr-10');
+
+                var btn = document.createElement('button');
+                btn.id = "button_text_" + i;
+
+                $(divQuestion).append(textChoice);
+                //divQuestion.appendChild(textChoice);
+                $(divQuestion).append(btn);
+                //divQuestion.appendChild(btn);
+                $(btn).click(function() {
+                    answer_texto("text_" + i, obj.answer);
+                });
+                //btn.addEventListener('click', answer_texto);
+
+                /* var labelChoice = document.createElement('label');
+                 labelChoice.id = "lbl_" + obj.id + "_" + j;
+                 labelChoice.textContent = textChoice;
+                 divQuestion.appendChild(labelChoice);*/
+            }
         }
-        
+
+
+
 
         function startQuiz() {
 
@@ -161,28 +221,46 @@
         }
 
 
-        function answer() {
-            var answers = document.getElementsByName(this.name);
+        function answer_texto(id, certa) {
+
+            var resposta = document.getElementById(id).value;
+            var button = document.getElementById(id);
+
+            if (resposta == certa) {
+                $(button).addClass("text-success");
+                correctAnswers++;
+                perguntasRespondidas++;
+                score++;
+            }
+            else {
+                $(button).addClass("text-danger")
+                wrongAnswers++;
+                perguntasRespondidas++;
+            }
+        }
+
+        function answer(choice, lbl) {
+            var answers = document.getElementsByName(choice.name);
             for (let i = 0; i < answers.length; i++) {
                 answers[i].disabled = true;
             }
-            let label = document.getElementById('lbl_' + this.name + '_' + this.id);
-            
-            if (this.value == '1') {
-                label.classList.add("text-success");
+
+
+            if (choice.value == '1') {
+                $("#" + lbl).addClass("text-success");
                 correctAnswers++;
                 perguntasRespondidas++;
-                //score++;
+                score++;
             }
             else {
-                label.classList.add("text-danger");
-                wrongAnswers++; 
+                $("#" + lbl).addClass("text-danger");
+                wrongAnswers++;
                 perguntasRespondidas++;
 
             }
 
             if (currentQuestion != totalQuestions) {
-                
+
                 $("#btn_next").removeClass('d-none');
                 $("#btn_prev").removeClass('d-none');
                 //btnNext.classList.remove('d-none');
@@ -199,17 +277,22 @@
                 //btnFinish.classList.remove('d-none');
 
                 $("#btn_next").addClass('d-none');
-                
+
                 $("#btn_prev").removeClass('d-none');
                 console.log("FIM!");
             }
 
         }
 
-        function previousQuestion(){
+        function previousQuestion() {
             $("#question_" + currentQuestion).addClass('d-none');
             currentQuestion--;
             $("#question_" + currentQuestion).removeClass('d-none');
+
+            if (currentQuestion == 1) {
+                $("#btn_prev").addClass('d-none');
+            }
+
         }
 
 
@@ -224,14 +307,14 @@
             //let nextCurrentQuestion = document.getElementById('question_' + currentQuestion);
             //nextCurrentQuestion.classList.remove('d-none');
 
-            if(currentQuestion == totalQuestions){
+            if (currentQuestion == totalQuestions) {
                 $("#btn_next").addClass('d-none');
                 $("#btn_prev").removeClass('d-none');
                 $("#btn_finish").removeClass('d-none');
-                $("#btn_finish").click(function(){
+                $("#btn_finish").click(function () {
                     finishQuiz();
                 })
-                
+
             }
 
             //clearTimeout(timer);
@@ -267,7 +350,7 @@
             //let resultado = document.getElementById('result');
             //resultado.classList.remove('d-none');
 
-            $("#respostas").html("<br>" + "Classificação:" + score + "<br>"+ "Respostas corretas: " + correctAnswers + "/" + totalQuestions + "<br>" + "Respostas erradas: " + wrongAnswers + "/" + totalQuestions + "<br>" + "Perguntas não respondidas: " + (totalQuestions - perguntasRespondidas) + "<br>" + "Tempo gasto no quiz:" + minutosGastos + ":" + segundosGastos);
+            $("#respostas").html("<br>" + "Classificação:" + score + "<br>" + "Respostas corretas: " + correctAnswers + "/" + totalQuestions + "<br>" + "Respostas erradas: " + wrongAnswers + "/" + totalQuestions + "<br>" + "Perguntas não respondidas: " + (totalQuestions - perguntasRespondidas) + "<br>" + "Tempo gasto no quiz:" + minutosGastos + ":" + segundosGastos);
             //let span = document.getElementById('respostas');
             //span.innerHTML = "<br>" + "Respostas corretas: " + correctAnswers + "/" + totalQuestions + "<br>" + "Respostas erradas: " + wrongAnswers + "/" + totalQuestions + "<br>" + "Perguntas não respondidas: " + (totalQuestions - perguntasRespondidas) + "<br>" + "Tempo gasto no quiz:" + minutosGastos + ":" + segundosGastos;
             //PERGUNTAS NAO RESPONDIDAS= TODAS AS PERGUNTAS - PERGUNTAS RESPONDIDAS(VARIAVEL NOVA CRIADA QUE É INCREMENTADA NAS RESPOSTAS CERTAS E ERRADAS, CONTAM COMO RESPONDIDAS)
@@ -284,7 +367,7 @@
             let minute = Math.floor((distance % (1000 * 60 * 60) / (1000 * 60)));
             let seconds = Math.floor((distance % (1000 * 60 * 60) / (1000)));
 
-            $("#time").html( minute + ":" + seconds);
+            $("#time").html(minute + ":" + seconds);
             //document.getElementById('time').innerHTML = minute + ":" + seconds;
 
             if (distance < 0) {
@@ -295,8 +378,8 @@
                 $("#btn_prev").addClass('d-none');
 
                 if (currentQuestion == totalQuestions) {
-                    $("#question_"+ currentQuestion).addClass('d-none');
-                    
+                    $("#question_" + currentQuestion).addClass('d-none');
+
 
                     //document.getElementById('question_' + currentQuestion).classList.add('d-none');
                     finishQuiz();
